@@ -1,0 +1,26 @@
+.sorting-visualiser {
+  text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  margin-top: 500px;
+}
+
+.array-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  height: 300px;
+  margin: 20px auto;
+  width: 90%;
+  overflow-x: auto;
+}
+
+.array-bar {
+  background-color: #007bff;
+  width: 5px;
+  transition: height 0.2s ease;
+}
