@@ -14,13 +14,26 @@
   justify-content: center;
   gap: 2px;
   height: 300px;
-  margin: 20px auto;
-  width: 90%;
+  margin: 0 auto;
+  max-width: 100%;
+  width: 500px;
   overflow-x: auto;
 }
 
 .array-bar {
   background-color: #007bff;
-  width: 5px;
-  transition: height 0.2s ease;
+  transition: height 0.1s ease;
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+.slider-container {
+  margin: 10px 0;
+}
+
+.array-bar.dynamic {
+  height: var(--bar-height);
+  width: var(--bar-width);
 }

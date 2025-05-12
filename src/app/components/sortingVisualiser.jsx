@@ -5,15 +5,21 @@ import './sortingVisualiser.css';
 
 function SortingVisualiser() {
   const [array, setArray] = useState([]);
-  const [speed, setSpeed] = useState(50); // Speed in milliseconds
+  const [speed, setSpeed] = useState(5);
+  const [size, setSize] = useState(50);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const orderedArray = Array.from({ length: 100 }, (_, i) => i + 1);
-    setArray(orderedArray);
-  }, []);
+    setArray(Array.from({ length: size }, (_, i) => i + 1));
+    setIsMounted(true);
+  }, [size]);
 
   const generateRandomArray = () => {
-    const shuffledArray = [...array].sort(() => Math.random() - 0.5);
+    if (!isMounted) return;
+    let shuffledArray = [...array];
+    for (let i = 0; i < 3; i++) {
+      shuffledArray = [...shuffledArray].sort(() => Math.random() - 0.5);
+    }
     setArray(shuffledArray);
   };
 
@@ -22,10 +28,9 @@ function SortingVisualiser() {
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = 0; j < arr.length - i - 1; j++) {
         if (arr[j] > arr[j + 1]) {
-          // Swap elements
           [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-          setArray([...arr]); // Update state to reflect changes
-          await new Promise((resolve) => setTimeout(resolve, speed)); // Use speed for delay
+          setArray([...arr]);
+          await new Promise((resolve) => setTimeout(resolve, 205 - speed));
         }
       }
     }
@@ -37,9 +42,12 @@ function SortingVisualiser() {
       <div className="array-container">
         {array.map((value, idx) => (
           <div
-            className="array-bar"
+            className="array-bar dynamic"
             key={idx}
-            style={{ height: `${value * 3}px` }}
+            style={{
+              '--bar-height': `${value * 3}px`,
+              '--bar-width': `${180 / size}%`,
+            }}
           ></div>
         ))}
       </div>
@@ -47,14 +55,25 @@ function SortingVisualiser() {
         <button onClick={generateRandomArray}>Generate New Array</button>
         <button onClick={bubbleSort}>Bubble Sort</button>
         <div className="slider-container">
-          <label htmlFor="speed-slider">Speed: {speed}ms</label>
+          <label htmlFor="speed-slider">Speed: {205 - speed}ms</label>
           <input
             id="speed-slider"
             type="range"
-            min="10"
+            min="5"
             max="200"
             value={speed}
             onChange={(e) => setSpeed(Number(e.target.value))}
+          />
+        </div>
+        <div className="slider-container">
+          <label htmlFor="size-slider">Size: {size}</label>
+          <input
+            id="size-slider"
+            type="range"
+            min="10"
+            max="100"
+            value={size}
+            onChange={(e) => setSize(Number(e.target.value))}
           />
         </div>
       </div>
