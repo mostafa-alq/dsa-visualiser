@@ -7,9 +7,11 @@ function SortingVisualiser() {
   const [array, setArray] = useState([]);
   const [barColors, setBarColors] = useState([]);
   const [speed, setSpeed] = useState(200);
-  const [size, setSize] = useState(50);
+  const [size, setSize] = useState(25);
   const [isMounted, setIsMounted] = useState(false);
   const [animateBars, setAnimateBars] = useState(false);
+  const [timeComplexity, setTimeComplexity] = useState('');
+  const [isSorting, setIsSorting] = useState(false);
 
   useEffect(() => {
     setArray(Array.from({ length: size }, (_, i) => i + 1));
@@ -27,9 +29,12 @@ function SortingVisualiser() {
     setArray(shuffledArray);
     setBarColors(Array(shuffledArray.length).fill(''));
     setAnimateBars(true);
+    setTimeComplexity('');
   };
 
   const bubbleSort = async () => {
+    setIsSorting(true);
+    setTimeComplexity('Bubble Sort:\nBest: O(n)\nAverage: O(n^2)\nWorst: O(n^2)');
     const arr = [...array];
     const colors = Array(arr.length).fill('');
     for (let i = 0; i < arr.length - 1; i++) {
@@ -60,6 +65,7 @@ function SortingVisualiser() {
     // Mark the first bar as sorted at the end
     colors[0] = 'green';
     setBarColors([...colors]);
+    setIsSorting(false);
   };
 
   return (
@@ -79,8 +85,8 @@ function SortingVisualiser() {
         ))}
       </div>
       <div className="controls">
-        <button onClick={generateRandomArray}>Generate New Array</button>
-        <button onClick={bubbleSort}>Bubble Sort</button>
+        <button onClick={generateRandomArray} disabled={isSorting}>Generate New Array</button>
+        <button onClick={bubbleSort} disabled={isSorting}>Bubble Sort</button>
         <div className="slider-container">
           <label htmlFor="speed-slider">Speed: {205 - speed}ms</label>
           <input
@@ -90,6 +96,7 @@ function SortingVisualiser() {
             max="200"
             value={speed}
             onChange={(e) => setSpeed(Number(e.target.value))}
+            disabled={isSorting}
           />
         </div>
         <div className="slider-container">
@@ -98,10 +105,14 @@ function SortingVisualiser() {
             id="size-slider"
             type="range"
             min="10"
-            max="100"
+            max="50"
             value={size}
             onChange={(e) => setSize(Number(e.target.value))}
+            disabled={isSorting}
           />
+        </div>
+        <div className="time-complexity-text">
+          <pre>{timeComplexity}</pre>
         </div>
       </div>
     </div>
