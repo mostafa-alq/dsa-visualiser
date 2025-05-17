@@ -5,13 +5,17 @@ import './sortingVisualiser.css';
 
 function SortingVisualiser() {
   const [array, setArray] = useState([]);
-  const [speed, setSpeed] = useState(5);
+  const [barColors, setBarColors] = useState([]);
+  const [speed, setSpeed] = useState(200);
   const [size, setSize] = useState(50);
   const [isMounted, setIsMounted] = useState(false);
+  const [animateBars, setAnimateBars] = useState(false);
 
   useEffect(() => {
     setArray(Array.from({ length: size }, (_, i) => i + 1));
+    setBarColors(Array(size).fill(''));
     setIsMounted(true);
+    setAnimateBars(false);
   }, [size]);
 
   const generateRandomArray = () => {
@@ -21,19 +25,41 @@ function SortingVisualiser() {
       shuffledArray = [...shuffledArray].sort(() => Math.random() - 0.5);
     }
     setArray(shuffledArray);
+    setBarColors(Array(shuffledArray.length).fill(''));
+    setAnimateBars(true);
   };
 
   const bubbleSort = async () => {
     const arr = [...array];
+    const colors = Array(arr.length).fill('');
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = 0; j < arr.length - i - 1; j++) {
+        // Highlight compared bars
+        colors[j] = 'orange';
+        colors[j + 1] = 'orange';
+        setBarColors([...colors]);
+        await new Promise((resolve) => setTimeout(resolve, 205 - speed));
         if (arr[j] > arr[j + 1]) {
           [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
           setArray([...arr]);
+          // Highlight swapped bars
+          colors[j] = 'red';
+          colors[j + 1] = 'red';
+          setBarColors([...colors]);
           await new Promise((resolve) => setTimeout(resolve, 205 - speed));
         }
+        // Reset colors after comparison
+        colors[j] = '';
+        colors[j + 1] = '';
+        setBarColors([...colors]);
       }
+      // Mark the last sorted bar
+      colors[arr.length - i - 1] = 'green';
+      setBarColors([...colors]);
     }
+    // Mark the first bar as sorted at the end
+    colors[0] = 'green';
+    setBarColors([...colors]);
   };
 
   return (
@@ -42,11 +68,12 @@ function SortingVisualiser() {
       <div className="array-container">
         {array.map((value, idx) => (
           <div
-            className="array-bar dynamic"
+            className={`array-bar dynamic${animateBars ? ' animated' : ''}`}
             key={idx}
             style={{
-              '--bar-height': `${value * 3}px`,
+              '--bar-height': `${(value / array.length) * 300}px`,
               '--bar-width': `${180 / size}%`,
+              backgroundColor: barColors[idx] || '',
             }}
           ></div>
         ))}
