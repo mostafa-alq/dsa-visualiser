@@ -5,7 +5,7 @@ import './sortingVisualiser.css';
 
 function SortingVisualiser() {
   const [array, setArray] = useState([]);
-  const [barColors, setBarColors] = useState([]);
+  const [barColors, setBarColours] = useState([]);
   const [speed, setSpeed] = useState(200);
   const [size, setSize] = useState(25);
   const [isMounted, setIsMounted] = useState(false);
@@ -15,7 +15,7 @@ function SortingVisualiser() {
 
   useEffect(() => {
     setArray(Array.from({ length: size }, (_, i) => i + 1));
-    setBarColors(Array(size).fill(''));
+    setBarColours(Array(size).fill(''));
     setIsMounted(true);
     setAnimateBars(false);
   }, [size]);
@@ -27,7 +27,7 @@ function SortingVisualiser() {
       shuffledArray = [...shuffledArray].sort(() => Math.random() - 0.5);
     }
     setArray(shuffledArray);
-    setBarColors(Array(shuffledArray.length).fill(''));
+    setBarColours(Array(shuffledArray.length).fill(''));
     setAnimateBars(true);
     setTimeComplexity('');
   };
@@ -36,36 +36,86 @@ function SortingVisualiser() {
     setIsSorting(true);
     setTimeComplexity('Bubble Sort:\nBest: O(n)\nAverage: O(n^2)\nWorst: O(n^2)');
     const arr = [...array];
-    const colors = Array(arr.length).fill('');
+    const colours = Array(arr.length).fill('');
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = 0; j < arr.length - i - 1; j++) {
-        // Highlight compared bars
-        colors[j] = 'orange';
-        colors[j + 1] = 'orange';
-        setBarColors([...colors]);
+        // highlight compared bars
+        colours[j] = 'orange';
+        colours[j + 1] = 'orange';
+        setBarColours([...colours]);
         await new Promise((resolve) => setTimeout(resolve, 205 - speed));
         if (arr[j] > arr[j + 1]) {
           [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
           setArray([...arr]);
-          // Highlight swapped bars
-          colors[j] = 'red';
-          colors[j + 1] = 'red';
-          setBarColors([...colors]);
+          // highlight swapped bars
+          colours[j] = 'red';
+          colours[j + 1] = 'red';
+          setBarColours([...colours]);
           await new Promise((resolve) => setTimeout(resolve, 205 - speed));
         }
-        // Reset colors after comparison
-        colors[j] = '';
-        colors[j + 1] = '';
-        setBarColors([...colors]);
+        // reset colours after comparison
+        colours[j] = '';
+        colours[j + 1] = '';
+        setBarColours([...colours]);
       }
-      // Mark the last sorted bar
-      colors[arr.length - i - 1] = 'green';
-      setBarColors([...colors]);
+      // mark the last sorted bar
+      colours[arr.length - i - 1] = 'green';
+      setBarColours([...colours]);
     }
-    // Mark the first bar as sorted at the end
-    colors[0] = 'green';
-    setBarColors([...colors]);
+    // mark the first bar as sorted at the end
+    colours[0] = 'green';
+    setBarColours([...colours]);
     setIsSorting(false);
+  };
+
+  const insertionSort = async () => {
+    setIsSorting(true);
+    setTimeComplexity('Insertion Sort:\nBest: O(n)\nAverage: O(n^2)\nWorst: O(n^2)');
+    const arr = [...array];
+    const colours = Array(arr.length).fill('');
+    for (let i = 1; i < arr.length; i++) {
+      let key = arr[i];
+      let j = i - 1;
+
+      // highlight the current bar being inserted
+      colours[i] = 'orange';
+      setBarColours([...colours]);
+      await new Promise((resolve) => setTimeout(resolve, 255 - speed));
+
+      while (j >= 0 && arr[j] > key) {
+        // highlight compared bars
+        colours[j] = 'red';
+        colours[j + 1] = 'red';
+        setBarColours([...colours]);
+        await new Promise((resolve) => setTimeout(resolve, 255 - speed));
+
+        arr[j+1] = arr[j];
+        setArray([...arr]);
+
+        // // reset colour after shifting
+        // colours[j + 1] = '';
+        // colours[j] = '';
+        // setBarColours([...colours]);
+        j--;
+      }
+      arr[j+1] = key;
+      setArray([...arr]);
+
+      // mark sorted portion
+      for (let k = 0; k <= i; k++) {
+        colours[k] = 'green';
+      }
+      setBarColours([...colours]);
+      await new Promise((resolve) => setTimeout(resolve, 255 - speed));
+    }
+
+    // mark all the final bars as sorted
+    for (let k = 0; k < arr.length; k++) {
+      colours[k] = 'green';
+    }
+    setBarColours([...colours]);
+    setIsSorting(false);
+
   };
 
   return (
@@ -87,6 +137,7 @@ function SortingVisualiser() {
       <div className="controls">
         <button onClick={generateRandomArray} disabled={isSorting}>Generate New Array</button>
         <button onClick={bubbleSort} disabled={isSorting}>Bubble Sort</button>
+        <button onClick={insertionSort} disabled={isSorting}>Insertion Sort</button>
         <div className="slider-container">
           <label htmlFor="speed-slider">Speed: {205 - speed}ms</label>
           <input
