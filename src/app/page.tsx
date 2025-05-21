@@ -1,5 +1,5 @@
 import styles from "./page.module.css";
-import SortingVisualiser from "./components/SortingVisualiser";
+import SortingVisualiser from "./components/sortingVisualiser";
 
 export default function Home() {
   return (
