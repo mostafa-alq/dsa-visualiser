@@ -1,11 +1,37 @@
+body {
+  background: linear-gradient(120deg, #050914 0%, #0a1124 100%);
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  color: #fff;
+}
+
 .sorting-visualiser {
   text-align: center;
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
-  margin-top: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(120deg, #0a1124 0%, #101c36 100%);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(10, 35, 66, 0.25);
+  padding: 48px 32px 32px 32px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.sorting-visualiser h1 {
+  font-weight: 800;
+  font-size: 2.6rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 24px;
+  color: #fff;
 }
 
 .array-container {
@@ -15,9 +41,10 @@
   gap: 2px;
   height: 300px;
   margin: 0 auto;
-  max-width: 100%;
-  width: 500px;
+  max-width: 900px;
+  width: 100%;
   overflow-x: auto;
+  background: transparent;
 }
 
 .array-bar {
@@ -45,9 +72,50 @@
   min-height: 80px;
   display: flex;
   align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  color: #fff;
 }
 
 .time-complexity-text pre {
   text-align: left;
   margin: 0;
+  color: #fff;
+}
+
+button, .button {
+  background: linear-gradient(90deg, #0a84ff 0%, #007bff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 16px rgba(0,123,255,0.10);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.12s;
+  letter-spacing: 0.04em;
+  margin: 0 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover, .button:hover {
+  background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(0,123,255,0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+
+button:active, .button:active {
+  background: linear-gradient(90deg, #0056b3 0%, #003e8a 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+  transform: translateY(1px) scale(0.98);
+}
+
+button:focus, .button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #80bdff;
 }
